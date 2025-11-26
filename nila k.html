@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamid Miner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 36px;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        
+        .card {
+            background: #1a1a2e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+        
+        .price {
+            font-size: 32px;
+            color: #4cd137;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            color: #4cd137;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #aaa;
+        }
+        
+        .progress-bar {
+            background: #333;
+            height: 10px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            background: #4cd137;
+            height: 100%;
+            width: 0%;
+            transition: width 1s linear;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+        }
+        
+        .info-btn {
+            background: #f39c12;
+        }
+        
+        .balance-btn {
+            background: #9b59b6;
+        }
+        
+        .withdraw-btn {
+            background: #e74c3c;
+        }
+        
+        .deposit-btn {
+            background: #3498db;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1a2e;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        .modal-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #aaa;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #333;
+            background: #0a0a0a;
+            color: white;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #4cd137;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: #2ecc71;
+            color: white;
+            border-radius: 8px;
+            display: none;
+            z-index: 2000;
+        }
+        
+        .error {
+            background: #e74c3c;
+        }
+        
+        .info-content {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #0a0a0a;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .info-section {
+            margin-bottom: 15px;
+        }
+        
+        .info-section h3 {
+            color: #ffd700;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .info-section p {
+            color: #aaa;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .prediction {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .contact-info {
+            background: #2c3e50;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .email-address {
+            color: #3498db;
+            font-weight: bold;
+            word-break: break-all;
+        }
+        
+        .mining-timer {
+            text-align: center;
+            color: #ffd700;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">HAMID MINER</div>
+            <div style="color: #aaa;">Professional Mining Platform</div>
+        </div>
+        
+        <div class="card">
+            <div style="text-align: center; color: #ffd700;">Live Token Price</div>
+            <div class="price" id="tokenPrice">$12.00</div>
+            <div style="text-align: center; color: #aaa; font-size: 14px;">Auto +$0.50 every 1 minute</div>
+            <div class="mining-timer" id="priceTimer">Next price update: 60s</div>
+        </div>
+        
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                <div style="color: #ffd700;">Mining Status</div>
+                <div style="background: #4cd137; color: black; padding: 5px 10px; border-radius: 15px; font-size: 12px;">ACTIVE</div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="dailyTokens">12</div>
+                    <div class="stat-label">Daily Tokens</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="totalMined">0</div>
+                    <div class="stat-label">Total Mined</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="walletBalance">0</div>
+                    <div class="stat-label">Wallet Balance</div>
+                </div>
+            </div>
+            
+            <div style="margin: 15px 0;">
+                <div style="display: flex; justify-content: space-between; font-size: 14px; color: #aaa; margin-bottom: 5px;">
+                    <span>Next Mining Reward</span>
+                    <span id="nextTokenTime">10:00</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress" id="miningProgress"></div>
+                </div>
+            </div>
+            
+            <div class="mining-timer" id="miningTimer">Next mining: 10:00</div>
+            
+            <div class="buttons">
+                <button class="btn info-btn" onclick="openInfoModal()">Information</button>
+                <button class="btn balance-btn" onclick="showBalance()">Balance</button>
+                <button class="btn withdraw-btn" onclick="openWithdrawModal()">Withdraw</button>
+                <button class="btn deposit-btn" onclick="openDepositModal()">Deposit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Information Modal -->
+    <div class="modal" id="infoModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeInfoModal()">×</button>
+            <div class="modal-title">Hamid Token Information</div>
+            
+            <div class="info-content">
+                <div class="info-section">
+                    <h3>📈 Listing Information</h3>
+                    <p>Hamid Token was listed in 2018 on major exchanges:</p>
+                    <p>• Binance</p>
+                    <p>• LBank</p>
+                    <p>• Nobitex</p>
+                </div>
+                
+                <div class="info-section">
+                    <h3>👤 About Founder</h3>
+                    <p>This token belongs to an Iranian person named <strong>Hamid Aivazi</strong></p>
+                </div>
+                
+                <div class="info-section">
+                    <h3>🏢 Company Information</h3>
+                    <p>Recently, companies have been established in:</p>
+                    <p>• Arak</p>
+                    <p>• Valajerd</p>
+                    <p>• Mazandaran - Lavij</p>
+                    <p><strong>New CEOs added:</strong></p>
+                    <p>• Marjan Amani</p>
+                    <p>• Davood Aivazi</p>
+                </div>
+                
+                <div class="prediction">
+                    <h3>🚀 AI Price Prediction</h3>
+                    <p>According to AI chart analysis, this token will reach <strong>$12,000</strong> by 2028!</p>
+                </div>
+                
+                <div class="contact-info">
+                    <h3>📧 Contact Information</h3>
+                    <p>Official Email Address:</p>
+                    <p class="email-address">golzarvdavvod@gmail.com</p>
+                </div>
+                
+                <div class="info-section">
+                    <h3>🌐 Official Address</h3>
+                    <p>Official Website: <strong>www.hamidtoken.com</strong></p>
+                    <p>Contract Address: <strong>0x742d35Cc6634C0532925a3b8D...</strong></p>
+                </div>
+            </div>
+            
+            <button class="submit-btn" onclick="closeInfoModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div class="modal" id="withdrawModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeWithdrawModal()">×</button>
+            <div class="modal-title">Withdraw Tokens</div>
+            
+            <div class="input-group">
+                <label>Card Number (16 digits)</label>
+                <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="16">
+            </div>
+            
+            <div class="input-group">
+                <label>Amount (min 100 tokens)</label>
+                <input type="number" id="withdrawAmount" placeholder="100" min="100">
+            </div>
+            
+            <button class="submit-btn" onclick="processWithdrawal()">Withdraw</button>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div class="modal" id="depositModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeDepositModal()">×</button>
+            <div class="modal-title">Deposit Funds</div>
+            
+            <div style="background: #0a0a0a; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                <div style="color: #aaa; margin-bottom: 10px;">Send 20,000 Toman to:</div>
+                <div style="color: #4cd137; font-weight: bold; text-align: center;">5859 4710 2780 1764</div>
+            </div>
+            
+            <div class="input-group">
+                <label>Transaction ID (min 3 chars)</label>
+                <input type="text" id="transactionId" placeholder="Enter transaction ID">
+            </div>
+            
+            <button class="submit-btn" onclick="processDeposit()">Confirm Deposit</button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-title">Success!</div>
+            <div style="text-align: center; color: #aaa; margin-bottom: 20px;" id="successMessage"></div>
+            <button class="submit-btn" onclick="closeSuccessModal()">OK</button>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // Global variables
+        let walletBalance = 0;
+        let totalMined = 0;
+        let dailyTokens = 12;
+        let tokenPrice = 12.00;
+        let miningPower = 1.0;
+        
+        // Timer variables
+        let miningTimeLeft = 600; // 10 minutes in seconds
+        let priceTimeLeft = 60; // 1 minute in seconds
+        let miningInterval;
+        let priceInterval;
+        let progressInterval;
+
+        function startMining() {
+            // Clear existing intervals
+            clearInterval(miningInterval);
+            clearInterval(priceInterval);
+            clearInterval(progressInterval);
+            
+            // Mining every 10 minutes (600 seconds)
+            miningInterval = setInterval(() => {
+                walletBalance += 10;
+                totalMined += 10;
+                updateUI();
+                showNotification("⛏️ 10 Hamid Tokens mined! Total: " + walletBalance);
+                miningTimeLeft = 600; // Reset timer
+            }, 600000); // 10 minutes in milliseconds
+
+            // Price update every 1 minute (60 seconds)
+            priceInterval = setInterval(() => {
+                tokenPrice += 0.50;
+                updateUI();
+                showNotification("💰 Token price increased to $" + tokenPrice.toFixed(2));
+                priceTimeLeft = 60; // Reset timer
+            }, 60000); // 1 minute in milliseconds
+
+            // Progress bar and countdown timer
+            progressInterval = setInterval(() => {
+                // Update mining countdown
+                miningTimeLeft--;
+                if (miningTimeLeft < 0) miningTimeLeft = 0;
+                
+                const miningMinutes = Math.floor(miningTimeLeft / 60);
+                const miningSeconds = miningTimeLeft % 60;
+                document.getElementById('miningTimer').textContent = 
+                    `Next mining: ${miningMinutes.toString().padStart(2, '0')}:${miningSeconds.toString().padStart(2, '0')}`;
+                
+                // Update price countdown
+                priceTimeLeft--;
+                if (priceTimeLeft < 0) priceTimeLeft = 0;
+                
+                const priceMinutes = Math.floor(priceTimeLeft / 60);
+                const priceSeconds = priceTimeLeft % 60;
+                document.getElementById('priceTimer').textContent = 
+                    `Next price update: ${priceSeconds.toString().padStart(2, '0')}s`;
+                
+                // Update progress bar (0-100% over 10 minutes)
+                const progress = 100 - (miningTimeLeft / 600 * 100);
+                document.getElementById('miningProgress').style.width = progress + '%';
+                
+                // Update next token time display
+                document.getElementById('nextTokenTime').textContent = 
+                    `${miningMinutes.toString().padStart(2, '0')}:${miningSeconds.toString().padStart(2, '0')}`;
+                    
+            }, 1000);
+        }
+
+        function updateUI() {
+            document.getElementById('walletBalance').textContent = Math.floor(walletBalance);
+            document.getElementById('totalMined').textContent = Math.floor(totalMined);
+            document.getElementById('dailyTokens').textContent = Math.floor(dailyTokens * miningPower);
+            document.getElementById('tokenPrice').textContent = '$' + tokenPrice.toFixed(2);
+        }
+
+        function openInfoModal() {
+            document.getElementById('infoModal').style.display = 'block';
+        }
+
+        function closeInfoModal() {
+            document.getElementById('infoModal').style.display = 'none';
+        }
+
+        function showBalance() {
+            const totalValue = (walletBalance * tokenPrice).toFixed(2);
+            showNotification("💰 Your current balance: " + Math.floor(walletBalance) + " Hamid Tokens ($" + totalValue + ")");
+        }
+
+        function openWithdrawModal() {
+            if (walletBalance < 100) {
+                showNotification('❌ Minimum withdrawal is 100 tokens!', true);
+                return;
+            }
+            document.getElementById('withdrawModal').style.display = 'block';
+        }
+
+        function closeWithdrawModal() {
+            document.getElementById('withdrawModal').style.display = 'none';
+        }
+
+        function openDepositModal() {
+            document.getElementById('depositModal').style.display = 'block';
+        }
+
+        function closeDepositModal() {
+            document.getElementById('depositModal').style.display = 'none';
+        }
+
+        function processWithdrawal() {
+            const cardNumber = document.getElementById('cardNumber').value;
+            const amount = parseInt(document.getElementById('withdrawAmount').value);
+
+            if (!cardNumber || cardNumber.length !== 16) {
+                showNotification('❌ Card number must be 16 digits!', true);
+                return;
+            }
+
+            if (!amount || amount < 100) {
+                showNotification('❌ Minimum withdrawal is 100 tokens!', true);
+                return;
+            }
+
+            if (amount > walletBalance) {
+                showNotification('❌ Insufficient balance!', true);
+                return;
+            }
+
+            walletBalance -= amount;
+            updateUI();
+            closeWithdrawModal();
+            
+            document.getElementById('successMessage').textContent = 
+                `Withdrawal of ${amount} tokens submitted. Funds will arrive within 15 minutes.`;
+            document.getElementById('successModal').style.display = 'block';
+        }
+
+        function processDeposit() {
+            const transactionId = document.getElementById('transactionId').value;
+
+            if (!transactionId || transactionId.length < 3) {
+                showNotification('❌ Transaction ID must be at least 3 characters!', true);
+                return;
+            }
+
+            miningPower = 1.25;
+            dailyTokens = 15;
+            updateUI();
+            closeDepositModal();
+            
+            document.getElementById('successMessage').textContent = 
+                "Deposit confirmed! Daily income increased to 15 tokens.";
+            document.getElementById('successModal').style.display = 'block';
+            showNotification("🎉 Daily income increased to 15 Hamid Tokens!");
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').style.display = 'none';
+        }
+
+        function showNotification(message, isError = false) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = isError ? 'notification error' : 'notification';
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+
+        // Initialize
+        updateUI();
+        startMining();
+        
+        // Show welcome message
+        setTimeout(() => {
+            showNotification("🚀 Hamid Miner started! You will receive 10 tokens every 10 minutes.");
+        }, 1000);
+    </script>
+</body>
+</html>
